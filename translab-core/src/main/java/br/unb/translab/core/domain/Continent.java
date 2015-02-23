@@ -16,6 +16,8 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.Objects;
+
 public class Continent
 {
     /**
@@ -85,5 +87,29 @@ public class Continent
     {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hashCode(this.getName(), this.getId(), this.getAcronym()) * 31;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        
+        if (obj == null || this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        
+        Continent other = (Continent) obj;
+        return (Objects.equal(this.getName(), other.getName()) && Objects.equal(this.getAcronym(), other.getAcronym())) ||
+               (this.getId() != null && Objects.equal(this.getId(), other.getId()));
     }
 }

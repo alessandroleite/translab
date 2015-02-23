@@ -16,6 +16,9 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.Objects;
+
+
 public class City
 {
     private Integer id;
@@ -74,5 +77,29 @@ public class City
     {
         this.name = name;
         return this;
+    }
+
+    @Override
+    public int hashCode()
+    {
+       return Objects.hashCode(this.getId(), this.getName(), this.getCountry()) * 31;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        
+        if (obj == null || getClass() != obj.getClass())
+        {
+            return false;
+        }
+        
+        City other = (City) obj;
+        return (Objects.equal(this.getName(), other.getName()) && Objects.equal(this.getCountry(), other.getCountry())) ||
+               (this.getId() != null && Objects.equal(this.getId(), other.getId()));
     }
 }

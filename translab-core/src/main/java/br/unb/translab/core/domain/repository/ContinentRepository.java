@@ -23,10 +23,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.skife.jdbi.v2.StatementContext;
+import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
+import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
+
+import com.google.common.base.Optional;
 
 import br.unb.translab.core.domain.Continent;
 import br.unb.translab.core.domain.repository.ContinentRepository.ContinentRowMapper;
@@ -42,6 +46,10 @@ public interface ContinentRepository
     
     @SqlQuery(SQL_SELECT_ALL_CONTINENTS + "ORDER BY name")
     List<Continent> listAll();
+    
+	@SqlQuery(SQL_SELECT_ALL_CONTINENTS + "WHERE lower(name) = lower(:name)")
+    @SingleValueResult
+	Optional<Continent> findByName(@Bind("name") String name);
     
     class ContinentRowMapper implements ResultSetMapper<Continent>
     {

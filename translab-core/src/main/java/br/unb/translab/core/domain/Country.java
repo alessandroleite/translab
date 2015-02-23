@@ -16,6 +16,8 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.Objects;
+
 public class Country
 {
     private Integer id;
@@ -93,5 +95,30 @@ public class Country
     {
         this.acronym = acronym;
         return this;
+    }
+
+    @Override
+    public int hashCode()
+    {
+       return Objects.hashCode(this.getAcronym(), this.getContinent(), this.getId(), this.getName()) * 17;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+       
+        if (obj == null || this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        
+        Country other = (Country) obj;
+        return (this.getId() != null && Objects.equal(this.getId(), other.getId())) ||
+               (Objects.equal(this.getAcronym(), other.getAcronym()) && Objects.equal(this.getContinent(), other.getContinent()) && 
+                Objects.equal(this.getName(), other.getName()));
     }
 }

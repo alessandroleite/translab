@@ -21,6 +21,7 @@ public class Airport
     private Integer id;
     private City city;
     private String acronym;
+    private String name;
     private String description;
 
     /**
@@ -76,6 +77,24 @@ public class Airport
         this.acronym = acronym;
         return this;
     }
+    
+
+    /**
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public Airport setName(String name)
+    {
+        this.name = name;
+        return this;
+    }
 
     /**
      * @return the description
@@ -94,4 +113,6 @@ public class Airport
         this.description = description;
         return this;
     }
+    
+    
 }

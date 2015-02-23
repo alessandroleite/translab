@@ -55,12 +55,12 @@ public interface AirportRepository
     @SqlQuery(SQL_ALL + "ORDER BY a.name, c.name, ct.name")
     List<Airport> listAll();
     
-    @SqlQuery(SQL_ALL + "WHERE lower(acronym) = lower(:acronym)")
+    @SqlQuery(SQL_ALL + "WHERE lower(a.acronym) = lower(:acronym)")
     @SingleValueResult
     Optional<Airport> findByAcronym(@Bind("acronym") String acronym);
     
     @SqlQuery(SQL_ALL + "WHERE id = :id")
-    Optional<Airport> findByAcronym(@Bind("id") Integer id);
+    Optional<Airport> findById(@Bind("id") Integer id);
     
     
     class AiportRowMapper implements ResultSetMapper<Airport>
@@ -75,7 +75,8 @@ public interface AirportRepository
             return new Airport().setAcronym(r.getString("airport_acronym"))
                                 .setCity(city)
                                 .setDescription(r.getString("airport_description"))
-                                .setId(r.getInt("airport_id"));
+                                .setId(r.getInt("airport_id"))
+                                .setName(r.getString("airport_name"));
         }
     }
 }

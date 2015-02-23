@@ -23,21 +23,25 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.skife.jdbi.v2.StatementContext;
+import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
-import com.google.common.base.Optional;
-
 import br.unb.translab.core.domain.Country;
 import br.unb.translab.core.domain.repository.ContinentRepository.ContinentRowMapper;
+import br.unb.translab.core.domain.repository.CountryRepository.CountryRowMapper;
 
+import com.google.common.base.Optional;
+
+@RegisterMapper(CountryRowMapper.class)
 public interface CountryRepository
 {
-    String SQL_SELECT_ALL_COUNTRIES = "SELECT id as c.country_id, c.acronym as country_acronym, c.name as country_name,\n" +
-                                      "c.continent_id, gr.name as continent_name\n" + 
+    String SQL_SELECT_ALL_COUNTRIES = "SELECT c.id as country_id, c.acronym as country_acronym, c.name as country_name,\n" +
+                                      "c.continent_id, gr.name as continent_name, gr.acronym as continent_acronym\n" + 
                                       "FROM country c\n"                            +
                                       "JOIN continent gr on gr.id = c.continent_id\n";
     
@@ -48,9 +52,9 @@ public interface CountryRepository
     @SqlQuery(SQL_SELECT_ALL_COUNTRIES + "ORDER BY c.name, gr.name")
     List<Country> listAll();
     
-    @SqlQuery(SQL_SELECT_ALL_COUNTRIES + " WHERE lower(name) = lower(name)")
+    @SqlQuery(SQL_SELECT_ALL_COUNTRIES + " WHERE lower(c.name) = lower(:name)")
     @SingleValueResult(Country.class)
-    Optional<Country> findByName(String name);
+    Optional<Country> findByName(@Bind("name") String name);
     
     class CountryRowMapper implements ResultSetMapper<Country>
     {

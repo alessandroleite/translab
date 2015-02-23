@@ -26,9 +26,8 @@
 		<license-header-file>${project.basedir}/HEADER</license-header-file>
 		<checkstyle.file>${project.basedir}/checkstyle.xml</checkstyle.file>
 
-		<jscience.version>4.3.1</jscience.version>
-		<joda.time.version>2.7</joda.time.version>
-		<slf4j.log4j12.version>1.7.6</slf4j.log4j12.version>
+		<jscience.version>4.3.1</jscience.version>		
+		<!-- <slf4j.log4j12.version>1.7.6</slf4j.log4j12.version> -->
 		<jdbi.ext.version>1.0.0-SNAPSHOT</jdbi.ext.version>
 		<postgresql.version>9.3-1102-jdbc41</postgresql.version>
 
@@ -360,19 +359,7 @@
 				<groupId>org.springframework.retry</groupId>
 				<artifactId>spring-retry</artifactId>
 				<version>${spring.retry.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.log4j12.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.log4j12.version}</version>
-			</dependency>
+			</dependency>			
 		</dependencies>
 
 	</dependencyManagement>
