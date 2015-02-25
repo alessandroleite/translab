@@ -16,6 +16,8 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.MoreObjects;
+
 public class Airport
 {
     private Integer id;
@@ -112,6 +114,19 @@ public class Airport
     {
         this.description = description;
         return this;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper(this)
+                          .add("acronym", this.getAcronym())
+                          .add("name", getName())
+                          .add("city", getCity())
+                          .add("description", getDescription())
+                          .add("id", getId())
+                          .omitNullValues()
+                          .toString();
     }
     
     

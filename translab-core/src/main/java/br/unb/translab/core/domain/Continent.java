@@ -16,6 +16,7 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public class Continent
@@ -112,4 +113,16 @@ public class Continent
         return (Objects.equal(this.getName(), other.getName()) && Objects.equal(this.getAcronym(), other.getAcronym())) ||
                (this.getId() != null && Objects.equal(this.getId(), other.getId()));
     }
+    
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper(this)
+                          .add("acronym", this.getAcronym())
+                          .add("id", this.getId())
+                          .add("name", this.getName())
+                          .omitNullValues()
+                          .toString();
+    }
+    
 }

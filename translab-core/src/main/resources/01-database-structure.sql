@@ -58,3 +58,12 @@ create table airport
 create index idx_aiport_city_id on airport (city_id);
 create unique index idx_aiport_acronym on airport (acronym);
 create unique index idx_aiport_name on airport (city_id, name);
+
+create table justification_type
+(
+   id serial not null primary key,
+   acronym varchar(4) not null,
+   description varchar(100) not null
+);
+
+create unique index idx_justification_acronym on justification_type (acronym);

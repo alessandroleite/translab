@@ -16,6 +16,7 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 public class Country
@@ -120,5 +121,17 @@ public class Country
         return (this.getId() != null && Objects.equal(this.getId(), other.getId())) ||
                (Objects.equal(this.getAcronym(), other.getAcronym()) && Objects.equal(this.getContinent(), other.getContinent()) && 
                 Objects.equal(this.getName(), other.getName()));
+    }
+    
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper(this)
+                          .add("acronym", this.getAcronym())
+                          .add("name", this.getName())
+                          .add("continent", this.getContinent())
+                          .add("id", this.getId())
+                          .omitNullValues()
+                          .toString();
     }
 }

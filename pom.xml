@@ -39,6 +39,8 @@
 		<commons.csv.version>1.1</commons.csv.version>
 		<apache.httpclient.version>4.3.1</apache.httpclient.version>
 
+		<jexcelapi.jxl.version>2.6.12</jexcelapi.jxl.version>
+
 		<h2database.version>1.4.185</h2database.version>
 		<jersey.version>2.8</jersey.version>
 
@@ -219,6 +221,12 @@
 				<groupId>io.dohko</groupId>
 				<artifactId>jdbi-ext</artifactId>
 				<version>${jdbi.ext.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sourceforge.jexcelapi</groupId>
+				<artifactId>jxl</artifactId>
+				<version>${jexcelapi.jxl.version}</version>
 			</dependency>
 
 			<!-- jersey dependencies -->

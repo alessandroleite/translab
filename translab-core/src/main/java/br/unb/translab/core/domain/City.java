@@ -16,6 +16,7 @@
  */
 package br.unb.translab.core.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 
@@ -101,5 +102,16 @@ public class City
         City other = (City) obj;
         return (Objects.equal(this.getName(), other.getName()) && Objects.equal(this.getCountry(), other.getCountry())) ||
                (this.getId() != null && Objects.equal(this.getId(), other.getId()));
+    }
+    
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper(this)
+                          .add("country", getCountry())
+                          .add("id", this.getId())
+                          .add("name", this.getName())
+                          .omitNullValues()
+                          .toString();
     }
 }
