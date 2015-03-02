@@ -67,3 +67,32 @@ create table justification_type
 );
 
 create unique index idx_justification_acronym on justification_type (acronym);
+
+
+create table airline
+(
+  id serial not null primary key,
+  oaci varchar(3) not null,
+  name varchar(180) not null
+);
+
+create unique index idx_airline_oaci on airline (oaci);
+create unique index idx_airline_name on airline (name);
+
+create table fly
+(
+   id bigserial not null primary key,
+   airline_id integer not null references airline (id),
+   airport_departure_id integer not null references airport(id),
+   airport_arrival_id integer not null references airport(id),
+   justification_type_id integer not null references justification_type(id),
+   fly_number varchar(4) not null,
+   fly_digit char(1) not null,
+   fly_type char(1) not null,
+   planned_departure_time datetime not null,
+   real_departure_time datetime,
+   planned_arrival_time datetime,
+   real_arrival_time datetime,
+   status char(1) not null,
+   check (airport_departure_id != airport_arrival_id)
+);
