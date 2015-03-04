@@ -1,9 +1,11 @@
-package br.unb.translab.core.data.anac.vra;
+package br.unb.translab.core.data.anac.vra.loader;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,13 +16,21 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 import br.unb.translab.core.domain.JustificationType;
+import br.unb.translab.core.domain.repository.JustificationRepository;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 
-public class JustificationXlsReadFunction implements Function<File, Optional<List<JustificationType>>>
+public class JustificationDataLoader implements Function<File, Optional<List<JustificationType>>>, DataLoader
 {
-    private static final transient Logger LOGGER = LoggerFactory.getLogger(JustificationXlsReadFunction.class);
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(JustificationDataLoader.class);
+    
+    private final JustificationRepository repository;
+    
+    public JustificationDataLoader(@Nonnull JustificationRepository repository)
+    {
+        this.repository = repository;
+    }
 
     @Override
     public Optional<List<JustificationType>> apply(File input)
@@ -56,5 +66,11 @@ public class JustificationXlsReadFunction implements Function<File, Optional<Lis
         }
 
         return optional;
+    }
+
+    @Override
+    public void load(File file) throws Exception
+    {
+        this.repository.insert(this.apply(file).get());
     }
 }

@@ -10,6 +10,7 @@ import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -27,6 +28,10 @@ public interface JustificationRepository
                             "FROM justification_type j\n";
     @SqlUpdate("INSERT INTO justification_type (acronym, description) VALUES (:acronym, :description)")
     Integer insert(@BindBean JustificationType justification);
+    
+    @SqlUpdate("INSERT INTO justification_type (acronym, description) VALUES (:acronym, :description)")
+    @BatchChunkSize(1000)
+    void insert(Iterable<JustificationType> justifications);
     
     @SqlQuery(SQL_SELECT_ALL + " ORDER BY j.acronym")
     List<JustificationType> listAll();

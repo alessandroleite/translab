@@ -24,8 +24,10 @@ import java.util.List;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -51,6 +53,10 @@ public interface AirportRepository
     
     @SqlUpdate("INSERT INTO airport (city_id, acronym, name, description) VALUES (:city.id, :acronym, :name, :description)")
     Integer insert(@BindBean Airport airport);
+    
+    @SqlBatch("INSERT INTO airport (city_id, acronym, name, description) VALUES (:city.id, :acronym, :name, :description)")
+    @BatchChunkSize(1000)
+    void insert(Iterable<Airport> airports);
     
     @SqlQuery(SQL_ALL + "ORDER BY a.name, c.name, ct.name")
     List<Airport> listAll();

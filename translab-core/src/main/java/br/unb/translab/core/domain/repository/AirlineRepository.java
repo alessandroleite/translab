@@ -9,8 +9,10 @@ import java.util.List;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
+import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -25,9 +27,14 @@ public interface AirlineRepository
 {
     String SQL_SELECT_ALL_AIRLINES = "SELECT a.id as airline_id, a.name as airline_name, a.oaci as airline_oaci\n" + 
                                      "FROM airline a\n";
+    
     @SqlUpdate("INSERT INTO airline (oaci, name) VALUES (:oaci, :name)")
     @GetGeneratedKeys
     Integer insert(@BindBean Airline airline);
+    
+    @SqlBatch("INSERT INTO airline (oaci, name) VALUES (:oaci, :name)")
+    @BatchChunkSize(1000)
+    void insert(Iterable<Airline> airlines);
     
     @SqlQuery(SQL_SELECT_ALL_AIRLINES + "WHERE a.id = :id")
     @SingleValueResult

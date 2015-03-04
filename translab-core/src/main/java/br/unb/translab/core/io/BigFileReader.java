@@ -119,6 +119,11 @@ public class BigFileReader implements Iterable<String>, Closeable
         return cont;
     }
     
+    /**
+     * Skips one line in the file iff there is one, and returns the content of the skipped line.
+     * 
+     * @return the value of the skipped line or {@link Optional#absent()} if there isn't one line to skip.
+     */
     public Optional<String> skip()
     {
         Optional<String> value = Optional.absent();

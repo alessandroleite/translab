@@ -1,4 +1,4 @@
-package br.unb.translab.core.data.anac.vra;
+package br.unb.translab.core.data.anac.vra.loader;
 
 import io.dohko.jdbi.exceptions.AnyThrow;
 
@@ -6,22 +6,36 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
+import br.unb.translab.core.data.anac.vra.loader.DataLoader;
 import br.unb.translab.core.domain.Airline;
+import br.unb.translab.core.domain.repository.AirlineRepository;
 
 import static com.google.common.collect.Lists.*;
+import static com.google.common.base.Preconditions.*;
 
 import com.google.common.base.Function;
 
-public class AirlineXlsReadFunction implements Function<File, List<Airline>>
+public class AirlineDataLoader implements Function<File, List<Airline>>, DataLoader
 {
-    @Override
-    public List<Airline> apply(File input)
+    private final AirlineRepository airlineRepository;
+    
+    public AirlineDataLoader(@Nonnull AirlineRepository repository)
     {
+        this.airlineRepository = repository;
+    }
+    
+    @Override
+    public List<Airline> apply(@Nonnull File input)
+    {
+        checkNotNull(input);
+        
         final List<Airline> airlines = newArrayList();
 
         Workbook workbook = null;
@@ -55,5 +69,12 @@ public class AirlineXlsReadFunction implements Function<File, List<Airline>>
         }
         
         return airlines;
+    }
+
+    @Override
+    public void load(File file) throws Exception
+    {
+        checkNotNull(file);
+        this.airlineRepository.insert(this.apply(file));
     }
 }

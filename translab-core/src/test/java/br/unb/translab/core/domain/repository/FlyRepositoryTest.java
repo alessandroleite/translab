@@ -1,34 +1,30 @@
 package br.unb.translab.core.domain.repository;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import br.unb.translab.core.data.anac.vra.ImportFlyDataCommand;
+import br.unb.translab.core.data.anac.vra.loader.FlyDataLoader;
 
 public class FlyRepositoryTest extends RepositoryTestSupport
 {
-    private FlyRepository flyRepository;
-    private ImportFlyDataCommand command;
-    
+    private FlyDataLoader loader;
+
     @Before
     @Override
     public void setUp()
     {
         super.setUp();
-        this.flyRepository = openRepository(FlyRepository.class);
-        command = new ImportFlyDataCommand
-                ( openRepository(AirlineRepository.class), 
-                  openRepository(JustificationRepository.class), 
-                  openRepository(AirportRepository.class)
-                );
+        loader = new FlyDataLoader(
+                openRepository(AirlineRepository.class), 
+                openRepository(JustificationRepository.class),
+                openRepository(AirportRepository.class), 
+                openRepository(FlyRepository.class));
     }
-    
+
     @Test
     public void insertOneFly() throws IOException
     {
-//        command.execute(new File("/Users/alessandro/projetos/translab/VRA_do_MES_2015_1.csv"));
     }
 }

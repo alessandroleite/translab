@@ -89,10 +89,10 @@ create table fly
    fly_number varchar(4) not null,
    fly_digit char(1) not null,
    fly_type char(1) not null,
-   planned_departure_time datetime not null,
-   real_departure_time datetime,
-   planned_arrival_time datetime,
-   real_arrival_time datetime,
+   planned_departure_time timestamp not null,
+   real_departure_time timestamp,
+   planned_arrival_time timestamp,
+   real_arrival_time timestamp,
    status char(1) not null,
    check (airport_departure_id != airport_arrival_id)
 );
