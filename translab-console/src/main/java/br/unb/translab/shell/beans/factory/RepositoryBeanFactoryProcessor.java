@@ -3,6 +3,7 @@ package br.unb.translab.shell.beans.factory;
 import java.util.Set;
 
 import org.reflections.Reflections;
+import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.scanners.TypeElementsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
@@ -22,7 +23,7 @@ public class RepositoryBeanFactoryProcessor implements BeanFactoryPostProcessor
     {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .addUrls(ClasspathHelper.forPackage("br.unb.translab"))
-                .addScanners(new TypeElementsScanner()));
+                .addScanners(new TypeElementsScanner(), new TypeAnnotationsScanner()));
 
         final Set<Class<?>> repositoryTypes = reflections.getTypesAnnotatedWith(Repository.class);
 
