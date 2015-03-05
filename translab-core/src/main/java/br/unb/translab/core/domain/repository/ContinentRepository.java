@@ -32,9 +32,11 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import com.google.common.base.Optional;
 
+import br.unb.translab.core.components.Repository;
 import br.unb.translab.core.domain.Continent;
 import br.unb.translab.core.domain.repository.ContinentRepository.ContinentRowMapper;
 
+@Repository
 @RegisterMapper(ContinentRowMapper.class)
 public interface ContinentRepository
 {

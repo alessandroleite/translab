@@ -34,11 +34,13 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import com.google.common.base.Optional;
 
+import br.unb.translab.core.components.Repository;
 import br.unb.translab.core.domain.Airport;
 import br.unb.translab.core.domain.City;
 import br.unb.translab.core.domain.Country;
 import br.unb.translab.core.domain.repository.AirportRepository.AiportRowMapper;
 
+@Repository
 @RegisterMapper(AiportRowMapper.class)
 public interface AirportRepository
 {

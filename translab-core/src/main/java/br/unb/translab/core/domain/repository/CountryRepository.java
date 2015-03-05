@@ -31,12 +31,14 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.customizers.SingleValueResult;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
+import br.unb.translab.core.components.Repository;
 import br.unb.translab.core.domain.Country;
 import br.unb.translab.core.domain.repository.ContinentRepository.ContinentRowMapper;
 import br.unb.translab.core.domain.repository.CountryRepository.CountryRowMapper;
 
 import com.google.common.base.Optional;
 
+@Repository
 @RegisterMapper(CountryRowMapper.class)
 public interface CountryRepository
 {

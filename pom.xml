@@ -26,7 +26,7 @@
 		<license-header-file>${project.basedir}/HEADER</license-header-file>
 		<checkstyle.file>${project.basedir}/checkstyle.xml</checkstyle.file>
 
-		<jscience.version>4.3.1</jscience.version>		
+		<jscience.version>4.3.1</jscience.version>
 		<!-- <slf4j.log4j12.version>1.7.6</slf4j.log4j12.version> -->
 		<jdbi.ext.version>1.0.0-SNAPSHOT</jdbi.ext.version>
 		<postgresql.version>9.3-1102-jdbc41</postgresql.version>
@@ -51,7 +51,11 @@
 
 		<spring.version>3.2.8.RELEASE</spring.version>
 		<spring.retry.version>1.0.3.RELEASE</spring.retry.version>
+		<spring.shell.version>1.1.0.RELEASE</spring.shell.version>
+
 		<infinispan-core.version>6.0.2.Final</infinispan-core.version>
+		<jline.version>2.12</jline.version>
+		<reflections.version>0.9.9</reflections.version>
 
 		<jackson-module-jaxb-annotations.version>2.4.0</jackson-module-jaxb-annotations.version>
 		<jackson-dataformat-yaml.version>2.4.0</jackson-dataformat-yaml.version>
@@ -110,6 +114,16 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</repository>
+
+		<repository>
+			<id>libs-milestone</id>
+			<url>http://repo.spring.io/libs-milestone/</url>
+		</repository>
+
+		<repository>
+			<id>libs-release</id>
+			<url>http://repo.spring.io/libs-release/</url>
 		</repository>
 	</repositories>
 
@@ -367,7 +381,48 @@
 				<groupId>org.springframework.retry</groupId>
 				<artifactId>spring-retry</artifactId>
 				<version>${spring.retry.version}</version>
-			</dependency>			
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.shell</groupId>
+				<artifactId>spring-shell</artifactId>
+				<version>${spring.shell.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>jline</groupId>
+						<artifactId>jline</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
+			<dependency>
+				<groupId>jline</groupId>
+				<artifactId>jline</artifactId>
+				<version>${jline.version}</version>
+			</dependency>
+
+			<!-- This project modules -->
+			<dependency>
+				<groupId>br.unb.translab</groupId>
+				<artifactId>translab-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.reflections</groupId>
+				<artifactId>reflections</artifactId>
+				<version>${reflections.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>xml-apis</groupId>
+						<artifactId>xml-apis</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>com.google.guava</groupId>
+						<artifactId>guava</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 		</dependencies>
 
 	</dependencyManagement>
