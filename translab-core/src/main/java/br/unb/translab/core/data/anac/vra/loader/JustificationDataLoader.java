@@ -16,8 +16,12 @@
  */
 package br.unb.translab.core.data.anac.vra.loader;
 
+import io.dohko.jdbi.exceptions.AnyThrow;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +55,31 @@ public class JustificationDataLoader implements Function<File, Optional<List<Jus
     @Override
     public Optional<List<JustificationType>> apply(File input)
     {
-        Optional<List<JustificationType>> optional = Optional.of((List<JustificationType>) new ArrayList<JustificationType>());
+        Optional<List<JustificationType>> result = Optional.of((List<JustificationType>) new ArrayList<JustificationType>());
+        
+        try
+        {
+            try(InputStream stream = new FileInputStream(input))
+            {
+                result = apply(stream);
+            }
+            
+        }catch (IOException exception)
+        {
+            AnyThrow.throwUncheked(exception);
+        }
+        
+        return result;
+    }
+    
+    public Optional<List<JustificationType>> apply(InputStream input)
+    {
+        Optional<List<JustificationType>> result = Optional.of((List<JustificationType>) new ArrayList<JustificationType>());
         
         Workbook workbook = null;
-        WorkbookSettings settings = new WorkbookSettings();
-        settings.setEncoding("ISO-8859-1");
+        
+        final WorkbookSettings settings = new WorkbookSettings();
+        settings.setEncoding(System.getProperty("anac.vra.data.encoding", System.getProperty("jxl.encoding", "ISO-8859-1")));
 
         try
         {
@@ -65,13 +89,13 @@ public class JustificationDataLoader implements Function<File, Optional<List<Jus
             for (int i = 4; i < sheet.getRows(); i++)
             {
                 Cell[] row = sheet.getRow(i);
-                optional.get().add(new JustificationType().setAcronym(row[1].getContents()).setDescription(row[2].getContents()));
+                result.get().add(new JustificationType().setAcronym(row[1].getContents().trim()).setDescription(row[2].getContents().trim()));
             }
         }
         catch (BiffException | IOException e)
         {
-            LOGGER.error("Error on reading justification's file: [{}]. Error message: [{}]", input.getAbsolutePath(), e.getMessage(), e);
-            optional = Optional.absent();
+            LOGGER.error("Error on reading the justification. The error message is: [{}]", e.getMessage(), e);
+            result = Optional.absent();
         }
         finally
         {
@@ -81,12 +105,19 @@ public class JustificationDataLoader implements Function<File, Optional<List<Jus
             }
         }
 
-        return optional;
+        return result;
     }
 
     @Override
-    public void load(File file) throws Exception
+    public void load(@Nonnull File file) throws Exception
     {
-        this.repository.insert(this.apply(file).get());
+        apply(file).get().stream().forEach(j -> repository.insert(j));
+//        this.repository.insert(this.apply(file).get());
+    }
+    
+    public void load(@Nonnull InputStream input) throws Exception
+    {
+        apply(input).get().stream().forEach(j -> repository.insert(j));
+//      this.repository.insert(apply(input).get());  
     }
 }

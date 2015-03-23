@@ -19,7 +19,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<source.version>1.7</source.version>
+		<java.source.version>1.8</java.source.version>
+		<java.target.version>${java.source.version}</java.target.version>
 
 		<internal.snapshots.repo.path>file://${project.basedir}/maven-repo/snapshots</internal.snapshots.repo.path>
 		<internal.release.repo.path>file://${project.basedir}/maven-repo/releases</internal.release.repo.path>
@@ -533,8 +534,8 @@
 				<version>3.1</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
-					<source>${source.version}</source>
-					<target>${source.version}</target>
+					<source>${java.source.version}</source>
+					<target>${java.target.version}</target>
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
 					<lineLength>180</lineLength>

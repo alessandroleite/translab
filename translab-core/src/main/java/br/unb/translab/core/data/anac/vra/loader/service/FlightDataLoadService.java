@@ -22,20 +22,20 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import br.unb.translab.core.domain.Fly;
-import br.unb.translab.core.domain.repository.FlyRepository;
+import br.unb.translab.core.domain.Flight;
+import br.unb.translab.core.domain.repository.FlightRepository;
 import static com.google.common.collect.Lists.*;
 
 import com.google.common.util.concurrent.AbstractScheduledService;
 
-public class FlyDataLoadService extends AbstractScheduledService
+public class FlightDataLoadService extends AbstractScheduledService
 {
-    private final BlockingQueue<Fly> queue = new LinkedBlockingDeque<Fly>();
+    private final BlockingQueue<Flight> queue = new LinkedBlockingDeque<Flight>();
 
     private final long delayInSeconds;
-    private final FlyRepository repository;
+    private final FlightRepository repository;
 
-    public FlyDataLoadService(long delayInSeconds, FlyRepository repository)
+    public FlightDataLoadService(long delayInSeconds, FlightRepository repository)
     {
         this.delayInSeconds = delayInSeconds;
         this.repository = repository;
@@ -46,17 +46,16 @@ public class FlyDataLoadService extends AbstractScheduledService
     {
         int i = 0;
 
-        Fly fly = queue.poll();
-        
-        List<Fly> flies = newArrayList();
+        Flight fly = queue.poll();
+        final List<Flight> flights = newArrayList();
 
-        while (fly != null && i++ <= 1000)
+        while (fly != null && i++ <= Integer.parseInt(System.getProperty("br.unb.translab.data.vra.batch.loader.size", "1000")))
         {
-            flies.add(fly);
+            flights.add(fly);
             fly = queue.poll();
         }
         
-        this.repository.insert(flies);
+        this.repository.insert(flights);
     }
 
     @Override
@@ -65,7 +64,7 @@ public class FlyDataLoadService extends AbstractScheduledService
         return Scheduler.newFixedDelaySchedule(0, delayInSeconds, SECONDS);
     }
     
-    public void offer(Fly fly)
+    public void offer(Flight fly)
     {
         this.queue.offer(fly);
     }

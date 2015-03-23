@@ -34,7 +34,7 @@ public class AirportRepositoryTest extends RepositoryTestSupport
     
     @Before
     @Override
-    public void setUp()
+    public void setUp() throws Exception
     {
         super.setUp();
         this.airportRepository = this.openRepository(AirportRepository.class);

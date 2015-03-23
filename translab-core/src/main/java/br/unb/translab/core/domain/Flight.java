@@ -20,7 +20,7 @@ import java.math.BigInteger;
 
 import org.joda.time.DateTime;
 
-public class Fly
+public class Flight
 {
     private BigInteger id;
     
@@ -36,7 +36,7 @@ public class Fly
 
     private DigitType digit;
 
-    private FlyType type;
+    private FlightType type;
 
     private DateTime plannedDepartureTime;
 
@@ -60,7 +60,7 @@ public class Fly
      * @param id
      *            the id to set
      */
-    public Fly setId(BigInteger id)
+    public Flight setId(BigInteger id)
     {
         this.id = id;
         return this;
@@ -79,7 +79,7 @@ public class Fly
     /**
      * @param airline the airline to set
      */
-    public Fly setAirline(Airline airline)
+    public Flight setAirline(Airline airline)
     {
         this.airline = airline;
         return this;
@@ -97,7 +97,7 @@ public class Fly
      * @param from
      *            the from to set
      */
-    public Fly setFrom(Airport from)
+    public Flight setFrom(Airport from)
     {
         this.from = from;
         return this;
@@ -115,7 +115,7 @@ public class Fly
      * @param to
      *            the to to set
      */
-    public Fly setTo(Airport to)
+    public Flight setTo(Airport to)
     {
         this.to = to;
         return this;
@@ -133,7 +133,7 @@ public class Fly
      * @param justification
      *            the justification to set
      */
-    public Fly setJustification(JustificationType justification)
+    public Flight setJustification(JustificationType justification)
     {
         this.justification = justification;
         return this;
@@ -151,7 +151,7 @@ public class Fly
      * @param number
      *            the number to set
      */
-    public Fly setNumber(String number)
+    public Flight setNumber(String number)
     {
         this.number = number;
         return this;
@@ -169,7 +169,7 @@ public class Fly
      * @param digit
      *            the digit to set
      */
-    public Fly setDigit(DigitType digit)
+    public Flight setDigit(DigitType digit)
     {
         this.digit = digit;
         return this;
@@ -178,7 +178,7 @@ public class Fly
     /**
      * @return the type
      */
-    public FlyType getType()
+    public FlightType getType()
     {
         return type;
     }
@@ -187,7 +187,7 @@ public class Fly
      * @param type
      *            the type to set
      */
-    public Fly setType(FlyType type)
+    public Flight setType(FlightType type)
     {
         this.type = type;
         return this;
@@ -205,7 +205,7 @@ public class Fly
      * @param plannedDepartureTime
      *            the plannedDepartureTime to set
      */
-    public Fly setPlannedDepartureTime(DateTime plannedDepartureTime)
+    public Flight setPlannedDepartureTime(DateTime plannedDepartureTime)
     {
         this.plannedDepartureTime = plannedDepartureTime;
         return this;
@@ -223,7 +223,7 @@ public class Fly
      * @param realDepartureTime
      *            the realDepartureTime to set
      */
-    public Fly setRealDepartureTime(DateTime realDepartureTime)
+    public Flight setRealDepartureTime(DateTime realDepartureTime)
     {
         this.realDepartureTime = realDepartureTime;
         return this;
@@ -241,7 +241,7 @@ public class Fly
      * @param plannedArrivalTime
      *            the plannedArrivalTime to set
      */
-    public Fly setPlannedArrivalTime(DateTime plannedArrivalTime)
+    public Flight setPlannedArrivalTime(DateTime plannedArrivalTime)
     {
         this.plannedArrivalTime = plannedArrivalTime;
         return this;
@@ -259,7 +259,7 @@ public class Fly
      * @param realArrivalTime
      *            the realArrivalTime to set
      */
-    public Fly setRealArrivalTime(DateTime realArrivalTime)
+    public Flight setRealArrivalTime(DateTime realArrivalTime)
     {
         this.realArrivalTime = realArrivalTime;
         return this;
@@ -277,7 +277,7 @@ public class Fly
      * @param status
      *            the status to set
      */
-    public Fly setStatus(String status)
+    public Flight setStatus(String status)
     {
         this.status = status;
         return this;

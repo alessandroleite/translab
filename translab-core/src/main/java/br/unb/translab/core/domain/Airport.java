@@ -17,21 +17,24 @@
 package br.unb.translab.core.domain;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
+import static com.google.common.base.Objects.*;
 
 public class Airport
 {
-    private Integer id;
-    private City city;
-    private String acronym;
-    private String name;
-    private String description;
+    private Integer _id;
+    private City _city;
+    private String _acronym;
+    private String _name;
+    private String _description;
 
     /**
      * @return the id
      */
     public Integer getId()
     {
-        return id;
+        return _id;
     }
 
     /**
@@ -40,7 +43,7 @@ public class Airport
      */
     public Airport setId(Integer id)
     {
-        this.id = id;
+        this._id = id;
         return this;
     }
 
@@ -49,7 +52,7 @@ public class Airport
      */
     public City getCity()
     {
-        return city;
+        return _city;
     }
 
     /**
@@ -58,7 +61,7 @@ public class Airport
      */
     public Airport setCity(City city)
     {
-        this.city = city;
+        this._city = city;
         return this;
     }
 
@@ -67,7 +70,7 @@ public class Airport
      */
     public String getAcronym()
     {
-        return acronym;
+        return _acronym;
     }
 
     /**
@@ -76,7 +79,7 @@ public class Airport
      */
     public Airport setAcronym(String acronym)
     {
-        this.acronym = acronym;
+        this._acronym = acronym;
         return this;
     }
     
@@ -86,7 +89,7 @@ public class Airport
      */
     public String getName()
     {
-        return name;
+        return _name;
     }
 
     /**
@@ -94,7 +97,7 @@ public class Airport
      */
     public Airport setName(String name)
     {
-        this.name = name;
+        this._name = name;
         return this;
     }
 
@@ -103,7 +106,7 @@ public class Airport
      */
     public String getDescription()
     {
-        return description;
+        return _description;
     }
 
     /**
@@ -112,7 +115,7 @@ public class Airport
      */
     public Airport setDescription(String description)
     {
-        this.description = description;
+        this._description = description;
         return this;
     }
     
@@ -130,4 +133,28 @@ public class Airport
     }
     
     
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+        
+        if (obj == null || this.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        
+        Airport other = (Airport) obj;
+        
+        return (equal(this.getCity(), other.getCity()) && equal(this.getName(), other.getName())) ||
+               (this.getId() != null && this.getId().equals(other.getId())); 
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return Objects.hashCode(this.getId(), this.getName(), this.getCity()) * 13;
+    }
 }

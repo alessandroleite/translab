@@ -21,31 +21,62 @@ import com.google.common.base.Optional;
 /**
  * See <a href="http://www2.anac.gov.br/biblioteca/iac/IAC1504.pdf">IAC1504</a> 
  */
-public enum FlyType
+public enum FlightType
 {
+    /**
+     * 
+     */
     CARGUEIRO('C', "Cargueiro"),
     
+    /**
+     * 
+     */
     ESPECIAL ('E', "Especial"),
     
+    /**
+     * 
+     */
     CARGUEIRO_INTERNATIONAL('G', "Cargueiro Internacional"),
     
+    /**
+     * 
+     */
     SUB_REGIONAL('H', "Sub-regional"),
     
+    /**
+     * 
+     */
     INTERNATIONAL ('I', "Internacional"),
     
+    /**
+     * 
+     */
     REDE_POSTAL ('L', "Rede Postal"),
     
+    /**
+     * 
+     */
     NACIONAL ('N', "Nacional"),
     
+    /**
+     * 
+     */
     REGIONAL ('R', "Regional");
 
-    private final Character acronym;
-    private final String description;
+    /**
+     * Acronym
+     */
+    private final Character _acronym;
+    
+    /**
+     * Description
+     */
+    private final String _description;
 
-    private FlyType(char acronym, String description)
+    private FlightType(char acronym, String description)
     {
-        this.acronym = acronym;
-        this.description = description;
+        this._acronym = acronym;
+        this._description = description;
     }
 
     /**
@@ -53,7 +84,7 @@ public enum FlyType
      */
     public Character getAcronym()
     {
-        return acronym;
+        return _acronym;
     }
 
     /**
@@ -61,14 +92,14 @@ public enum FlyType
      */
     public String getDescription()
     {
-        return description;
+        return _description;
     }
 
-    public static Optional<FlyType> valueOfFromId(String id)
+    public static Optional<FlightType> valueOfFromId(String id)
     {
-        Optional<FlyType> result = Optional.absent();
+        Optional<FlightType> result = Optional.absent();
         
-        for (FlyType type: values())
+        for (FlightType type: values())
         {
             if (type.getAcronym().equals(id.charAt(0)))
             {

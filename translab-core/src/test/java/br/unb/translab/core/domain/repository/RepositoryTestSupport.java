@@ -61,7 +61,7 @@ public class RepositoryTestSupport
     }
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                     .addUrls(ClasspathHelper.forPackage("br.unb.translab"))

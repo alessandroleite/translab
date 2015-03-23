@@ -33,7 +33,7 @@ public class CityRepositoryTest extends RepositoryTestSupport
     
     @Before
     @Override
-    public void setUp()
+    public void setUp() throws Exception
     {
         super.setUp();
         this.cityRepository = openRepository(CityRepository.class);

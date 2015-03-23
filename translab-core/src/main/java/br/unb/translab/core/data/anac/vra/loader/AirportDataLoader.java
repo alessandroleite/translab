@@ -16,15 +16,18 @@
  */
 package br.unb.translab.core.data.anac.vra.loader;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.newArrayList;
 import io.dohko.jdbi.exceptions.AnyThrow;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -42,8 +45,14 @@ import br.unb.translab.core.domain.repository.CountryRepository;
 
 import com.google.common.base.Function;
 
+import static com.google.common.base.Preconditions.*;
+import static com.google.common.collect.Lists.*;
+
+
 public class AirportDataLoader implements Function<File, List<Airport>>, DataLoader
 {
+    private static final transient Logger LOGGER = LoggerFactory.getLogger(AirportDataLoader.class.getName());
+    
     private final AirportRepository airportRepository;
     private final CityRepository cityRepository;
     private final ContinentRepository continentRepository;
@@ -62,15 +71,34 @@ public class AirportDataLoader implements Function<File, List<Airport>>, DataLoa
     
     
     @Override
-    public List<Airport> apply(File input)
+    public List<Airport> apply(final File input)
+    {
+        List<Airport> airports = newArrayList();
+
+        try
+        {
+            try (FileInputStream stream = new FileInputStream(input))
+            {
+                airports = apply(stream);
+            }
+        }
+        catch (IOException exception)
+        {
+            AnyThrow.throwUncheked(exception);
+        }
+
+        return airports;
+    }
+    
+    public List<Airport> apply(final InputStream input)
     {
         checkNotNull(input);
-        List<Airport> result = newArrayList();
+        final List<Airport> result = newArrayList();
         
         Workbook workbook = null;
         
-        WorkbookSettings settings = new WorkbookSettings();
-        settings.setEncoding("ISO-8859-1");
+        final WorkbookSettings settings = new WorkbookSettings();
+        settings.setEncoding(System.getProperty("anac.vra.data.encoding", System.getProperty("jxl.encoding", "ISO-8859-1")));
 
         try
         {
@@ -90,7 +118,7 @@ public class AirportDataLoader implements Function<File, List<Airport>>, DataLoa
                 }
 
                 Country country = this.countryRepository.findByName(row[5].getContents().trim())
-                                                        .or(new Country().setName(row[5].getContents().trim()).setContinent(continent));
+                                                        .or(new Country().setAcronym(row[4].getContents().trim()).setName(row[5].getContents().trim()).setContinent(continent));
                 
                 if (country.getId() == null)
                 {
@@ -107,9 +135,19 @@ public class AirportDataLoader implements Function<File, List<Airport>>, DataLoa
                 Airport airport = new Airport()
                         .setAcronym(row[1].getContents().trim())
                         .setCity(city)
-                        .setDescription(row[2].getContents().trim());
-
-                result.add(airport);
+                        .setDescription(row[2].getContents().trim().toUpperCase())
+                        .setName(row[2].getContents().trim().toUpperCase());
+                
+                int index = result.indexOf(airport);
+                
+                if (index == -1)
+                {
+                    result.add(airport);
+                }
+                else 
+                {
+                    LOGGER.warn("Duplicated airport. Existing airport: [{}], new airport: [{}]", result.get(index), airport);
+                }
             }
         }
         catch (BiffException | IOException exception)
@@ -128,8 +166,14 @@ public class AirportDataLoader implements Function<File, List<Airport>>, DataLoa
     }
 
     @Override
-    public void load(File file) throws Exception
+    public void load(@Nonnull File file) throws Exception
     {
-        this.airportRepository.insert(this.apply(file));
+        this.apply(file).stream().forEach(airport -> this.airportRepository.insert(airport));
+    }
+    
+    public void load (@Nonnull InputStream input) throws Exception
+    {
+        this.apply(input).stream().forEach(airport -> this.airportRepository.insert(airport));
+//        this.airportRepository.insert(this.apply(input));
     }
 }

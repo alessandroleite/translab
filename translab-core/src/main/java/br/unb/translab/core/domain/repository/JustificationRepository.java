@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.sqlobject.Bind;
+import org.skife.jdbi.v2.sqlobject.SqlBatch;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
@@ -42,14 +43,15 @@ import br.unb.translab.core.domain.repository.JustificationRepository.Justificat
 public interface JustificationRepository
 {
     String SQL_SELECT_ALL = "SELECT id as justification_type_id, acronym as justification_type_acronym, " + 
-                            " description as justification_type_description\n" +
+                            " description as justification_type_description\n"                            +
                             "FROM justification_type j\n";
+    
     @SqlUpdate("INSERT INTO justification_type (acronym, description) VALUES (:acronym, :description)")
     Integer insert(@BindBean JustificationType justification);
     
-    @SqlUpdate("INSERT INTO justification_type (acronym, description) VALUES (:acronym, :description)")
+    @SqlBatch("INSERT INTO justification_type (acronym, description) VALUES (:acronym, :description)")
     @BatchChunkSize(1000)
-    void insert(Iterable<JustificationType> justifications);
+    void insert(@BindBean Iterable<JustificationType> justifications);
     
     @SqlQuery(SQL_SELECT_ALL + " ORDER BY j.acronym")
     List<JustificationType> listAll();

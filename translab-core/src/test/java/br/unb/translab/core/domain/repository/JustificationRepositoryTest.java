@@ -32,7 +32,7 @@ public class JustificationRepositoryTest extends RepositoryTestSupport
 
     @Before
     @Override
-    public void setUp()
+    public void setUp() throws Exception
     {
         super.setUp();
         this.repository = openRepository(JustificationRepository.class);

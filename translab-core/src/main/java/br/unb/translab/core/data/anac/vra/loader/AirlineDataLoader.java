@@ -32,7 +32,6 @@ import jxl.read.biff.BiffException;
 import br.unb.translab.core.data.anac.vra.loader.DataLoader;
 import br.unb.translab.core.domain.Airline;
 import br.unb.translab.core.domain.repository.AirlineRepository;
-
 import static com.google.common.collect.Lists.*;
 import static com.google.common.base.Preconditions.*;
 
@@ -51,13 +50,12 @@ public class AirlineDataLoader implements Function<File, List<Airline>>, DataLoa
     public List<Airline> apply(@Nonnull File input)
     {
         checkNotNull(input);
-        
         final List<Airline> airlines = newArrayList();
-
+        
         Workbook workbook = null;
 
-        WorkbookSettings settings = new WorkbookSettings();
-        settings.setEncoding("ISO-8859-1");
+        final WorkbookSettings settings = new WorkbookSettings();
+        settings.setEncoding(System.getProperty("anac.vra.data.encoding", System.getProperty("jxl.encoding", "ISO-8859-1")));
 
         try
         {

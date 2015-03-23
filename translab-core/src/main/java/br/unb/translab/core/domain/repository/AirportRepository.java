@@ -58,10 +58,13 @@ public interface AirportRepository
     
     @SqlBatch("INSERT INTO airport (city_id, acronym, name, description) VALUES (:city.id, :acronym, :name, :description)")
     @BatchChunkSize(1000)
-    void insert(Iterable<Airport> airports);
+    void insert(@BindBean Iterable<Airport> airports);
     
     @SqlQuery(SQL_ALL + "ORDER BY a.name, c.name, ct.name")
     List<Airport> listAll();
+    
+    @SqlQuery(SQL_ALL + "WHERE lower(c.name) = lower(:city)\n ORDER BY a.name, c.name, ct.name")
+    List<Airport> listAllOnCity(@Bind("city") String city);
     
     @SqlQuery(SQL_ALL + "WHERE lower(a.acronym) = lower(:acronym)")
     @SingleValueResult
@@ -87,4 +90,5 @@ public interface AirportRepository
                                 .setName(r.getString("airport_name"));
         }
     }
+
 }
