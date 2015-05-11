@@ -113,11 +113,13 @@ SELECT
    ad.acronym as airport_departure_acronym, ad.description as airport_departure_description,
    ad.name as airport_departure_name, cad.name as city_name_airport_departure,
    aa.acronym as airport_arrival_acronym, aa.description as airport_arrival_description,
-   aa.name as airport_arrival_name, caa.name as city_name_airport_arrival
+   aa.name as airport_arrival_name, caa.name as city_name_airport_arrival, 
+   j.acronym as justification_type_acronym, j.description as justification_type_description 
 FROM flight f
-  JOIN airline a   on a.id  = f.airline_id
-  JOIN airport ad  on ad.id = f.airport_departure_id
-  JOIN airport aa  on aa.id = f.airport_arrival_id
-  JOIN city    cad on cad.id = ad.city_id
-  JOIN city    caa on caa.id = aa.city_id
+  JOIN airline            a   on a.id  = f.airline_id
+  JOIN airport            ad  on ad.id = f.airport_departure_id
+  JOIN airport            aa  on aa.id = f.airport_arrival_id
+  JOIN city               cad on cad.id = ad.city_id
+  JOIN city               caa on caa.id = aa.city_id
+  JOIN justification_type j   on j.id = justification_type_id 
 order by f.airline_id, f.planned_departure_time asc;  

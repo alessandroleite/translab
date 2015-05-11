@@ -16,10 +16,12 @@
  */
 package br.unb.translab.core.domain.repository;
 
+import io.dohko.jdbi.BigIntegerArgumentFactory;
 import io.dohko.jdbi.JodaTimeArgumentFactory;
 import io.dohko.jdbi.OptionalArgumentFactory;
 import io.dohko.jdbi.OptionalContainerFactory;
 import io.dohko.jdbi.args.JodaDateTimeMapper;
+import io.dohko.jdbi.util.BigIntegerMapper;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,9 +57,11 @@ public class RepositoryTestSupport
 
         dbi.registerArgumentFactory(new JodaTimeArgumentFactory());
         dbi.registerArgumentFactory(new OptionalArgumentFactory());
+        dbi.registerArgumentFactory(new BigIntegerArgumentFactory());
 
         dbi.registerContainerFactory(new OptionalContainerFactory());
         dbi.registerMapper(new JodaDateTimeMapper());
+        dbi.registerMapper(new BigIntegerMapper());
     }
 
     @Before

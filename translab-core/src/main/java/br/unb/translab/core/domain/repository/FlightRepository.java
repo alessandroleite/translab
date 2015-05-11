@@ -18,6 +18,7 @@ package br.unb.translab.core.domain.repository;
 
 import io.dohko.jdbi.args.JodaDateTimeMapper;
 import io.dohko.jdbi.binders.BindBean;
+import io.dohko.jdbi.util.BigIntegerMapper;
 
 import java.math.BigInteger;
 import java.sql.ResultSet;
@@ -51,13 +52,14 @@ import br.unb.translab.core.domain.repository.JustificationRepository.Justificat
 import com.google.common.base.Optional;
 
 @Repository
-@RegisterMapper(FlightMapper.class)
+@RegisterMapper({FlightMapper.class, BigIntegerMapper.class})
 public interface FlightRepository
 {
     String SQL_INSERT_FLIGHT = "INSERT INTO flight (airline_id, airport_departure_id, airport_arrival_id, justification_type_id, number, digit,\n" + 
                                "type, planned_departure_time, real_departure_time, planned_arrival_time, real_arrival_time, status)\n"             + 
                                "VALUES (:airline.id, :from.id, :to.id, :justification.id, :number, :digit.id,\n"                                   +
-                               "        :type.acronym, :plannedDepartureTime, :realDepartureTime, :plannedArrivalTime, :realArrivalTime, :status)";
+                               "        :type.acronym, :plannedDepartureTime, :realDepartureTime, :plannedArrivalTime," + 
+                               "        :realArrivalTime, :status)";
     
     
     String SQL_SELECT_ALL_FLIGHTS = "SELECT \n"                                                          +
@@ -68,22 +70,23 @@ public interface FlightRepository
              "airport_departure_acronym, airport_departure_description,\n"                               +
              "airport_departure_name, city_name_airport_departure,\n"                                    +
              "airport_arrival_acronym, airport_arrival_description,\n"                                   +
-             "airport_arrival_name, city_name_airport_arrival\n"                                         + 
+             "airport_arrival_name, city_name_airport_arrival,\n"                                        +
+             "justification_type_acronym, justification_type_description\n"                              +
            "FROM vw_flight\n";
 
     @SqlUpdate(SQL_INSERT_FLIGHT)
-    @GetGeneratedKeys
+    @GetGeneratedKeys(value = BigIntegerMapper.class)
     BigInteger insert(@BindBean @Nonnull Flight flight);
     
     @SqlBatch(SQL_INSERT_FLIGHT)
     @BatchChunkSize(1000)
     void insert(@BindBean @Nonnull Iterable<Flight> flight);
     
-    @SqlQuery(SQL_SELECT_ALL_FLIGHTS + "WHERE id = :id")
+    @SqlQuery(SQL_SELECT_ALL_FLIGHTS + "WHERE flight_id = :id")
     @SingleValueResult
     Optional<Flight> findById(@Bind("id") BigInteger id);
     
-    @SqlQuery(SQL_SELECT_ALL_FLIGHTS + " WHERE lower(flight_number) = lower(:number) ORDER BY airline_id, planned_departure_time")
+    @SqlQuery(SQL_SELECT_ALL_FLIGHTS + "WHERE lower(flight_number) = lower(:number) ORDER BY airline_id, planned_departure_time")
     List<Flight> findByFlightNumber(@Bind("number") String number);
     
     @SqlQuery("SELECT f.id as flight_id, f.airline_id, f.airport_departure_id as ")
@@ -109,11 +112,11 @@ public interface FlightRepository
                     .setName(r.getString("airport_arrival_name"));
             
             flight.setAirline(new AirlineRowMapper().map(index, r, ctx))
-                  .setDigit(DigitType.valueOfFromId("fight_digit").orNull())
+                  .setDigit(DigitType.valueOfFromId("flight_digit").orNull())
                   .setFrom(departureAirport)
-                  .setId(r.getBigDecimal("fight_id").toBigInteger())
+                  .setId(r.getBigDecimal("flight_id").toBigInteger())
                   .setJustification(new JustificationRowMapper().map(index, r, ctx))
-                  .setNumber(r.getString("fight_number"))
+                  .setNumber(r.getString("flight_number"))
                   .setPlannedArrivalTime(new JodaDateTimeMapper().extractByName(r, "planned_arrival_time"))
                   .setRealArrivalTime(new JodaDateTimeMapper().extractByName(r, "real_arrival_time"))
                   .setRealDepartureTime(new JodaDateTimeMapper().extractByName(r, "real_departure_time"))
